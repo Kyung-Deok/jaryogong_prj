@@ -56,4 +56,4 @@ festival_info_df = pd.DataFrame(datas, columns=['codename', 'guname', 'title', '
 # print(festival_info_df.info())
 
 # 최종적으로 csv 파일로 저장
-festival_info_df.to_csv("festival_info.csv", encoding="utf-8")
+festival_info_df.to_csv("festival_info.csv", encoding="utf-8-sig")
