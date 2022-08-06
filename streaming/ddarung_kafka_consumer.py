@@ -1,5 +1,6 @@
 from kafka import KafkaConsumer
 from json import loads
+import time
 
 # topic, broker list
 consumer = KafkaConsumer(
@@ -14,7 +15,8 @@ consumer = KafkaConsumer(
 # consumer list를 가져온다
 print('[begin] get consumer list')
 for message in consumer:
-    print("Topic: %s, Partition: %d, Offset: %d, Key: %s, Value: %s" % (
-        message.topic, message.partition, message.offset, message.key, message.value
+    time.sleep(2)
+    print("Topic: %s, Partition: %d, Offset: %d, Key: %s" % (
+        message.topic, message.partition, message.offset, message.key, 
     ))
 print('[end] get consumer list')
