@@ -53,6 +53,6 @@ while True:
     producer.flush()
     
     print('success')
-    
+    # 종료는 sys.exit() 구상중
 # 1998개 갱신
 pprint(len(ontime_datas)) 
