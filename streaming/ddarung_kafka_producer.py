@@ -25,10 +25,10 @@ producer = KafkaProducer(
 # stationName : 이름
 # lat,lot : 위도, 경도
 
-url_list=[f'http://openapi.seoul.go.kr:8088/{service_key}/json/bikeList/1/1000',f'http://openapi.seoul.go.kr:8088/{service_key}/json/bikeList/1001/2000']
+url_list=[f'http://openapi.seoul.go.kr:8088/{service_key}/json/bikeList/1/1000',f'http://openapi.seoul.go.kr:8088/{service_key}/json/bikeList/1001/2000', f'http://openapi.seoul.go.kr:8088/{service_key}/json/bikeList/2001/3000']
 print(url_list)
 
-ontime_datas = {}
+# ontime_datas = {}
 i=0
 while True:
     '''
@@ -39,17 +39,19 @@ while True:
     '''
     res1 = requests.get(url_list[0])
     res2 = requests.get(url_list[1])
+    res3 = requests.get(url_list[2])
     parse_data1= res1.json()['rentBikeStatus']['row']
     parse_data2=res2.json()['rentBikeStatus']['row']
+    parse_data3=res3.json()['rentBikeStatus']['row']
     
-    ontime_datas['datas']=[parse_data1, parse_data2]
+    ontime_datas = parse_data1 + parse_data2 + parse_data3
 
     # i += 1
     # data = {'test': i }
     
     time.sleep(2)
     
-    producer.send('stream_bikes', value=ontime_datas)
+    producer.send('stream_bikes', key='stream_datas',value=ontime_datas)
     producer.flush()
     
     print('success')
