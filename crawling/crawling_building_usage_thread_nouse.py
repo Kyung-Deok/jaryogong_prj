@@ -8,8 +8,10 @@ import re
 import requests
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
-
 service = Service('../../drivers/chromedriver.exe')
+
+service = Service('../drivers/chromedriver.exe')
+
 driver = webdriver.Chrome(service=service)
 
 url = 'http://blcm.go.kr/map2/#'
