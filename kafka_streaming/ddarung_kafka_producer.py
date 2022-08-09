@@ -29,7 +29,7 @@ url_list=[f'http://openapi.seoul.go.kr:8088/{service_key}/json/bikeList/1/1000',
 print(url_list)
 
 # ontime_datas = {}
-i=0
+
 while True:
     '''
     for i in range(len(url_list)):
@@ -45,9 +45,6 @@ while True:
     parse_data3=res3.json()['rentBikeStatus']['row']
     
     ontime_datas = parse_data1 + parse_data2 + parse_data3
-
-    # i += 1
-    # data = {'test': i }
     
     time.sleep(2)
     
