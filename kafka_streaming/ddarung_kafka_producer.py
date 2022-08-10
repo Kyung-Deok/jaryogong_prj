@@ -48,10 +48,10 @@ while True:
     
     time.sleep(2)
     
-    producer.send('stream_bikes', key='stream_datas',value=ontime_datas)
+    producer.send('stream_bikes',value=ontime_datas)
     producer.flush()
     
     print('success')
-    # 종료는 sys.exit() 구상중
+    # 종료는 sys.exit() 구상중 
 # 1998개 갱신
 pprint(len(ontime_datas)) 
