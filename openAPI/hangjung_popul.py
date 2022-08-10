@@ -61,7 +61,6 @@ for k in range(len(url_list)):
         # 최초엔 csv파일 write모드로 생성, csv파일이 존재한다면 add 모드로 추가
 
         if not os.path.exists('../filedata/LOCAL_PEOPLE_DONG_2208.csv'):
-
             hangjung_popul_df.to_csv('LOCAL_PEOPLE_DONG_2208.csv', encoding='utf-8-sig', index=False, mode='w')
         else:
             hangjung_popul_df.to_csv('LOCAL_PEOPLE_DONG_2208.csv', encoding='utf-8-sig', index=False, mode='a', header=False)
