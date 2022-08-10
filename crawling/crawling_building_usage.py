@@ -7,6 +7,7 @@ from openpyxl import Workbook
 import re
 
 service = Service('../drivers/chromedriver.exe')
+
 driver = webdriver.Chrome(service=service)
 
 url = 'https://blcm.go.kr/stat/customizedStatic/CustomizedStaticSttst.do#'
