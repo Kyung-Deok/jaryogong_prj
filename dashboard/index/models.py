@@ -14,3 +14,4 @@ from django.db import models
 
 
 # bike_rental : 대여 정보(팩트 테이블)
+
