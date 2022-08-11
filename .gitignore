@@ -1,9 +1,4 @@
 *.txt
 
 # venv - dashboard
-dashboard/bin
-dashboard/include
-dashboard/lib
-dashboard/lib64
-dashboard/share
-dashboard/pyvenv.cfg
+
