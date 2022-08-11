@@ -4,7 +4,6 @@ attrs==22.1.0
 beautifulsoup4==4.11.1
 branca==0.5.0
 bs4==0.0.1
-certifi @ file:///opt/conda/conda-bld/certifi_1655968806487/work/certifi
 cffi==1.15.1
 charset-normalizer==2.1.0
 cryptography==37.0.4
