@@ -1,3 +1,8 @@
 *.txt
 
 dashboard/config/env_settings.py
+
+dashboard/config/__pycache__
+dashboard/index/__pycache__
+
+dashboard/index/migrations/__pycache__
