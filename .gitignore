@@ -1,1 +1,3 @@
 *.txt
+
+dashboard/config/env_settings.py
