@@ -19,4 +19,8 @@ from index import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home),
+    path('ch_usr/', views.change_user),
+    path('vouchers', views.vouchers),
+    path('rent_tops/', views.rent_tops),
+    path('events/', views.events),
 ]
