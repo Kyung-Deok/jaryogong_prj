@@ -1,4 +1,3 @@
 *.txt
 
-# venv - dashboard
-
+dashboard/config/env_settings.py
