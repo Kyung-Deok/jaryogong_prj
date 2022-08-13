@@ -32,7 +32,7 @@ def stream_keyword(request) :
 
 
 def change_user(request):
-    # 기준년도에 맞춰서 연도 별 대여량 합계
+    # 기준년도에 맞춰서 연도 별 대여량 합계 표시 for문으로할수 없나?
     try :
         data = {
         'total_2018' : RentalPerYear.objects.filter(ref_year='2018').aggregate(Sum('rental_amount_year')),
