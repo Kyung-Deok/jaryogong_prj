@@ -6,3 +6,6 @@ dashboard/config/__pycache__
 dashboard/index/__pycache__
 
 dashboard/index/migrations/__pycache__
+
+index/db.sqlite3
+index/migrations
