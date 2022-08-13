@@ -3,7 +3,7 @@ import json
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.db.models import Sum, Avg
-from .models import RentalPerYear, SumQuantityPerHourStop
+from .models import OntimeRentalInfo, RentalPerYear, SumQuantityPerHourStop
 import datetime
 # Create your views here.
 
@@ -14,30 +14,33 @@ import datetime
 def home(request) :    
     return JsonResponse({"h" : "hello world"})
 
+
+def stream_keyword(request) :
+    # 오늘의 따릉이 대여건수, 가장 많이 빌려진 대여소, 자전거 거치율100% 이상 대여소 주소, 자전거 거치율 50% 미만 대여소 주소
+    rent_total = OntimeRentalInfo.objects.aggregate(rent_total=Sum('parking_amount')-Sum('holder_amount'))
+    rent_top5 = OntimeRentalInfo.objects.all().order_by('-parking_amount')[0:5]
+    parking_higher = OntimeRentalInfo.objects.filter(parking_rate__gt=100)
+    parking_lower= OntimeRentalInfo.objects.filter(parking_rate__lt=50)
+    
+    
 # 기준년도에 맞춰서 연도 별 대여량 합계
 def change_user(request):
     try :
         data = {
-        'total_2018' : RentalPerYear.objects.filter(year='2018').aggregate(Sum('use_count')),
-        'total_2019' : RentalPerYear.objects.filter(year='2019').aggregate(Sum('use_count')),
-        'total_2020' : RentalPerYear.objects.filter(year='2020').aggregate(Sum('use_count')),
-        'total_2021' : RentalPerYear.objects.filter(year='2021').aggregate(Sum('use_count')),
+        'total_2018' : RentalPerYear.objects.filter(ref_year='2018').aggregate(Sum('rental_amount_year')),
+        'total_2019' : RentalPerYear.objects.filter(ref_year='2019').aggregate(Sum('rental_amount_year')),
+        'total_2020' : RentalPerYear.objects.filter(ref_year='2020').aggregate(Sum('rental_amount_year')),
+        'total_2021' : RentalPerYear.objects.filter(ref_year='2021').aggregate(Sum('rental_amount_year')),
         }
         return JsonResponse(data, json_dumps_params={'ensure_ascii': False}, status=200)
     except ValueError :
         return JsonResponse({'err':"err"}, status=400)
-# rental_record_per_hour : 시간대 별 대여량 as rrph
-# bike_rental : 대여 정보(시간대 별 대여소 별 이용량) as br
-
-# 기준 시간(ref_time_date)의 
-# :11(오전), 12:(오후)
-
 #오전 시간대 오후 시간대의 이용권 형태를 원 그래프로 표현 가능 
 # ⇒ 오전, 오후 그래프 하나 씩, 대여소 총 집계한 데이터로, 
 # 날짜 필터?
 def vouchers(request):
     try:
-        if request.method=="POST" : 
+        if request.method=="POST" :
             data={}
             choice_date = json.load(request.body)
             if choice_date is None:
