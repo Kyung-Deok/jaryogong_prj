@@ -1,8 +1,6 @@
-from csv import excel_tab
 from datetime import date
 from functools import total_ordering
 import json
-from telnetlib import STATUS
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.db.models import Sum
