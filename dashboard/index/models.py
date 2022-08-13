@@ -83,7 +83,7 @@ class AuthUserUserPermissions(models.Model):
         db_table = 'auth_user_user_permissions'
         unique_together = (('user', 'permission'),)
 
-
+#연령별 평균 이용량
 class AvgQuantityAge(models.Model):
     avg_age_id = models.AutoField(primary_key=True)
     day_of_week = models.CharField(max_length=10, blank=True, null=True)
@@ -95,7 +95,7 @@ class AvgQuantityAge(models.Model):
         managed = False
         db_table = 'avg_quantity_age'
 
-
+# 이용권별 평균 이용량
 class AvgQuantityVoucher(models.Model):
     avg_voucher_id = models.AutoField(primary_key=True)
     day_of_week = models.CharField(max_length=10, blank=True, null=True)
@@ -236,11 +236,17 @@ class MetroStation(models.Model):
 
 
 class OntimeRentalInfo(models.Model):
+    # 시퀀스 ID
     ontime_rental_info_id = models.AutoField(primary_key=True)
+    # 대여소 ID
     bike_stop_code = models.CharField(max_length=20, blank=True, null=True)
+    # 타임스탬프
     ontime_timestamp = models.DateTimeField()
+    # 거치대
     holder_amount = models.IntegerField(blank=True, null=True)
+    # 거치율
     parking_rate = models.IntegerField(blank=True, null=True)
+    # 거치된 자전거 수
     parking_amount = models.IntegerField(blank=True, null=True)
 
     class Meta:
@@ -266,7 +272,7 @@ class Population(models.Model):
         managed = False
         db_table = 'population'
 
-
+#연간 데이터
 class RentalPerYear(models.Model):
     rental_per_year_id = models.AutoField(primary_key=True)
     bike_stop_id = models.IntegerField()
