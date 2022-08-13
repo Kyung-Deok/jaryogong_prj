@@ -7,5 +7,5 @@ dashboard/index/__pycache__
 
 dashboard/index/migrations/__pycache__
 
-index/db.sqlite3
-index/migrations
+dashboard/index/db.sqlite3
+dashboard/index/migrations
