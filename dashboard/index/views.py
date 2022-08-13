@@ -1,10 +1,10 @@
 from datetime import date
-from functools import total_ordering
 import json
 from django.shortcuts import render
 from django.http import JsonResponse
-from django.db.models import Sum
-from models import *
+from django.db.models import Sum, Avg
+from .models import RentalPerYear, SumQuantityPerHourStop
+import datetime
 # Create your views here.
 
 # rental_per_year : 연도별 대여량
@@ -16,13 +16,13 @@ def home(request) :
 
 # 기준년도에 맞춰서 연도 별 대여량 합계
 def change_user(request):
-    data = {}
     try :
-        data['total_2018'] = Rental_per_year.objects.filter(ref_year='2018').aggregate(Sum('rent_amount_year'))
-        data['total_2019'] = Rental_per_year.objects.filter(ref_year='2019').aggregate(Sum('rent_amount_year'))
-        data['total_2020'] = Rental_per_year.objects.filter(ref_year='2020').aggregate(Sum('rent_amount_year'))
-        data['total_2021'] = Rental_per_year.objects.filter(ref_year='2021').aggregate(Sum('rent_amount_year'))
-    
+        data = {
+        'total_2018' : RentalPerYear.objects.filter(year='2018').aggregate(Sum('use_count')),
+        'total_2019' : RentalPerYear.objects.filter(year='2019').aggregate(Sum('use_count')),
+        'total_2020' : RentalPerYear.objects.filter(year='2020').aggregate(Sum('use_count')),
+        'total_2021' : RentalPerYear.objects.filter(year='2021').aggregate(Sum('use_count')),
+        }
         return JsonResponse(data, json_dumps_params={'ensure_ascii': False}, status=200)
     except ValueError :
         return JsonResponse({'err':"err"}, status=400)
@@ -44,12 +44,12 @@ def vouchers(request):
                 choice_date = date.now()
             # 오전 시간대 (:11) 대여소 총 집계한 일일권 사용자
             #오전 구분(원하는 날짜만, 그중 기준시간 데이터만,오전시간만 집계)``
-            morning = Rental_record_per_hour.objects\
+            morning = RentalPerYear.objects\
                 .filter(ref_date=choice_date)\
-                .annotate(Sum('17'),Sum('18'),Sum('19'),Sum('20')) # 00-24까지 컬럼이 존재
-            evenning = Rental_record_per_hour.objects\
+                .annotate(morn = Sum('17')+Sum('18')+Sum('19')+Sum('20')) # 00-24까지 컬럼이 존재
+            evenning = RentalPerYear.objects\
                 .filter(ref_date=choice_date)\
-                .annotate(Sum('17'),Sum('18'),Sum('19'),Sum('20'))
+                .annotate(even = Sum('17')+Sum('18')+Sum('19')+Sum('20'))
         
             data['morning'] = morning
             data['evenning'] = evenning
@@ -58,9 +58,28 @@ def vouchers(request):
             return JsonResponse(data, status=200)
     except ValueError:
         return JsonResponse({'err':'value error'},status=400)   
-    
-def rent_tops(request):
-    pass
 
+
+# 시간대 별 대여소 별 대여량
+# 날짜 필터 걸고, 요일 별 필터
+# 요일별 시간대로 쪼개진 사용량 : 대여량 top5 => 손대면 표시 
+def rent_tops(request):
+    try:
+        if request.method == "POST":
+            #요일별 
+            choice_days = json.load(request.body)
+            if choice_days is None :
+                days_of_weeks= ['월','화', '수', '목','금','토','일']
+                choice_today = datetime.datetime.today().weekday()
+                choice_days = days_of_weeks[choice_today]
+            # 대여소id, 기준요일을 가져온다, 해당요일에 해당하는, 옆에 Sum
+            datas_of_days = SumQuantityPerHourStop.objects.get("bike_stop_id", "ref_time").filter(ref_time=choice_days)\
+                .annotate(Sum("0"),Sum("1"),Sum("2"),Sum("3"),Sum("4"),Sum("5"),Sum("6"),Sum("7"),Sum("8"),Sum("9"),Sum("10"),Sum("11"),Sum("12"),Sum("13"),Sum("14"),Sum("15"),Sum("16"),Sum("17"),Sum("18"),Sum("19"),Sum("20"),Sum("21"),Sum("22"),Sum("23"),Sum("24"))
+            
+            # bike_stop = datas_of_days.bike_stop_name
+            data = {"datas_of_days":datas_of_days, "bike_stop_name" : "bike_stop"}
+            return JsonResponse(data, json_dumps_params={'ensure_ascii': False}, status=200) 
+    except :
+        return JsonResponse({"err" :"err"},status=400)
 def events(request):
     pass
