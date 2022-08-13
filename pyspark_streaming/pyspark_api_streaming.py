@@ -10,6 +10,7 @@ import json
 import time
 import requests
 import os
+import datetime
 
 # spark_version = '3.2.2'
 # os.environ['PYSPARK_SUBMIT_ARGS'] = '--packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.2.2'
@@ -40,6 +41,10 @@ stream_kafka_df = spark.readStream.format("kafka")\
     .option('startingOffsets','earliest')\
     .load()
 
+# times = stream_kafka_df.select('timestamps')
+# time_stamps = datetime.now().strftime("%Y-%M-%D %H:%M:%S")
+
+
 select_stream_df = stream_kafka_df.selectExpr("CAST(value AS STRING) as json_data")\
     .select(split(col("json_data"),",").alias("streams"))\
     .select(explode(col("streams")))\
@@ -47,10 +52,11 @@ select_stream_df = stream_kafka_df.selectExpr("CAST(value AS STRING) as json_dat
     .select("json_data.*")
 
 load_stream_df=select_stream_df.drop("lat","lot","stationName")\
-    .withColumnRenamed('parkingBikeTotCnt', 'count_parking_bikes')\
-    .withColumnRenamed('rackTotCnt','count_racks')\
-    .withColumnRenamed('share', 'per_share')\
-    .withColumnRenamed('stationId', 'station_id')
+    .withColumnRenamed('parkingBikeTotCnt', 'parking_amount')\
+    .withColumnRenamed('rackTotCnt','holder_amount')\
+    .withColumnRenamed('share', 'parking_rate')\
+    .withColumnRenamed('stationId', 'bike_stop_code')\
+    .withColumn('ontime_timestamp', stream_kafka_df.select('timestamp'))
 
 # root
 #  |-- station_id: string (nullable = true)
