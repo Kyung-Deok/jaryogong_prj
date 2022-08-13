@@ -97,10 +97,15 @@ class AvgQuantityAge(models.Model):
 
 # 이용권별 평균 이용량
 class AvgQuantityVoucher(models.Model):
+    # 시퀀스 id
     avg_voucher_id = models.AutoField(primary_key=True)
+    # 요일 데이터 : 월~일
     day_of_week = models.CharField(max_length=10, blank=True, null=True)
+    # 시간 : 0~24
     time = models.IntegerField(blank=True, null=True)
+    # 이용권 종류
     voucher = models.CharField(max_length=50, blank=True, null=True)
+    # 평균 이용권 수량
     avg_voucher_quantity = models.FloatField(blank=True, null=True)
 
     class Meta:
@@ -234,7 +239,7 @@ class MetroStation(models.Model):
         managed = False
         db_table = 'metro_station'
 
-
+# 실시간 데이터
 class OntimeRentalInfo(models.Model):
     # 시퀀스 ID
     ontime_rental_info_id = models.AutoField(primary_key=True)
@@ -272,23 +277,32 @@ class Population(models.Model):
         managed = False
         db_table = 'population'
 
-#연간 데이터
+#연간 이용량 데이터
 class RentalPerYear(models.Model):
+    # 시퀀스 id
     rental_per_year_id = models.AutoField(primary_key=True)
+    # 대여소 id
     bike_stop_id = models.IntegerField()
+    # 연도 별 대여량
     rental_amount_year = models.IntegerField(blank=True, null=True)
+    # 연도
     ref_year = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'rental_per_year'
 
-# 팩트테이블
+# 팩트 테이블 따릉이 이용 데이터
 class SumQuantityPerHourStop(models.Model):
+    # 시퀀스 id
     sum_quantity_hour_id = models.AutoField(primary_key=True)
+    # 대여소 id
     bike_stop_id = models.IntegerField()
+    # 요일 구분
     day_of_week = models.CharField(max_length=10, blank=True, null=True)
+    # 시간대
     time = models.IntegerField(blank=True, null=True)
+    # 총합 이용량
     sum_quantity = models.IntegerField(blank=True, null=True)
 
     class Meta:
