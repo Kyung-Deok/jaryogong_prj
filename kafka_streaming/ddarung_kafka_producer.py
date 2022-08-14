@@ -13,7 +13,7 @@ service_key = '5a4d53625467686535365477586f46'
 
 producer = KafkaProducer(
     bootstrap_servers=['ubuntu:9091','ubuntu:9092','ubuntu:9093'],
-    value_serializer=lambda v: dumps(v).encode('utf-8'),
+    value_serializer=lambda v: dumps(v,ensure_ascii=False).encode('utf-8'),
     acks=0
     )
 
@@ -43,6 +43,8 @@ while True:
     parse_data1= res1.json()['rentBikeStatus']['row']
     parse_data2=res2.json()['rentBikeStatus']['row']
     parse_data3=res3.json()['rentBikeStatus']['row']
+    
+    # time_stamps = datetime.now().strftime("%Y-%M-%D %H:%M:%S")
     
     ontime_datas = parse_data1 + parse_data2 + parse_data3
     
