@@ -1,8 +1,6 @@
 from django.db import models
 
-# 연간이용량
 
-# 시간당 이용량
 class RentalRecordPerHour(models.Model):
     rental_record_per_hour_id = models.AutoField(primary_key=True)
     ref_date = models.DateField(blank=True, null=True)
@@ -83,7 +81,7 @@ class AuthUserUserPermissions(models.Model):
         db_table = 'auth_user_user_permissions'
         unique_together = (('user', 'permission'),)
 
-#연령별 평균 이용량
+
 class AvgQuantityAge(models.Model):
     avg_age_id = models.AutoField(primary_key=True)
     day_of_week = models.CharField(max_length=10, blank=True, null=True)
@@ -95,17 +93,12 @@ class AvgQuantityAge(models.Model):
         managed = False
         db_table = 'avg_quantity_age'
 
-# 이용권별 평균 이용량
+
 class AvgQuantityVoucher(models.Model):
-    # 시퀀스 id
     avg_voucher_id = models.AutoField(primary_key=True)
-    # 요일 데이터 : 월~일
     day_of_week = models.CharField(max_length=10, blank=True, null=True)
-    # 시간 : 0~24
     time = models.IntegerField(blank=True, null=True)
-    # 이용권 종류
     voucher = models.CharField(max_length=50, blank=True, null=True)
-    # 평균 이용권 수량
     avg_voucher_quantity = models.FloatField(blank=True, null=True)
 
     class Meta:
@@ -113,15 +106,15 @@ class AvgQuantityVoucher(models.Model):
         db_table = 'avg_quantity_voucher'
 
 
-class BikeStopInfo(models.Model):
-    bike_stop_id = models.IntegerField(primary_key=True)
-    bike_stop_code = models.CharField(unique=True, max_length=20, blank=True, null=True)
-    bike_stop_lat = models.DecimalField(max_digits=10, decimal_places=7, blank=True, null=True)
-    bike_stop_lot = models.DecimalField(max_digits=10, decimal_places=7, blank=True, null=True)
+class BikeStopInformation(models.Model):
+    bike_stop_id = models.TextField(blank=True, null=True)
+    bike_stop_code = models.TextField(blank=True, null=True)
+    bike_stop_lat = models.DecimalField(max_digits=6, decimal_places=4, blank=True, null=True)
+    bike_stop_lot = models.DecimalField(max_digits=7, decimal_places=4, blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'bike_stop_info'
+        db_table = 'bike_stop_information'
 
 
 class Building(models.Model):
@@ -139,9 +132,9 @@ class Building(models.Model):
 
 class BusStop(models.Model):
     bus_stop_id = models.IntegerField(primary_key=True)
-    bus_stop_name = models.CharField(unique=True, max_length=200, blank=True, null=True)
-    bus_stop_lat = models.DecimalField(max_digits=10, decimal_places=7, blank=True, null=True)
-    bus_stop_lot = models.DecimalField(max_digits=10, decimal_places=7, blank=True, null=True)
+    bus_stop_name = models.CharField(max_length=200, blank=True, null=True)
+    bus_stop_lat = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
+    bus_stop_lot = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -197,7 +190,9 @@ class Event(models.Model):
     event_id = models.AutoField(primary_key=True)
     event_name = models.CharField(max_length=200, blank=True, null=True)
     event_category = models.CharField(max_length=200, blank=True, null=True)
-    event_date = models.DateField(blank=True, null=True)
+    year = models.IntegerField(blank=True, null=True)
+    month = models.IntegerField(blank=True, null=True)
+    date = models.IntegerField(blank=True, null=True)
     event_addr = models.CharField(max_length=1000, blank=True, null=True)
 
     class Meta:
@@ -239,19 +234,13 @@ class MetroStation(models.Model):
         managed = False
         db_table = 'metro_station'
 
-# 실시간 데이터
+
 class OntimeRentalInfo(models.Model):
-    # 시퀀스 ID
     ontime_rental_info_id = models.AutoField(primary_key=True)
-    # 대여소 ID
     bike_stop_code = models.CharField(max_length=20, blank=True, null=True)
-    # 타임스탬프
     ontime_timestamp = models.DateTimeField()
-    # 거치대
     holder_amount = models.IntegerField(blank=True, null=True)
-    # 거치율
     parking_rate = models.IntegerField(blank=True, null=True)
-    # 거치된 자전거 수
     parking_amount = models.IntegerField(blank=True, null=True)
 
     class Meta:
@@ -277,32 +266,22 @@ class Population(models.Model):
         managed = False
         db_table = 'population'
 
-#연간 이용량 데이터
+
 class RentalPerYear(models.Model):
-    # 시퀀스 id
     rental_per_year_id = models.AutoField(primary_key=True)
-    # 대여소 id
-    bike_stop_id = models.IntegerField()
-    # 연도 별 대여량
-    rental_amount_year = models.IntegerField(blank=True, null=True)
-    # 연도
-    ref_year = models.IntegerField(blank=True, null=True)
+    year = models.IntegerField(blank=True, null=True)
+    use_count = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'rental_per_year'
 
-# 팩트 테이블 따릉이 이용 데이터
+
 class SumQuantityPerHourStop(models.Model):
-    # 시퀀스 id
     sum_quantity_hour_id = models.AutoField(primary_key=True)
-    # 대여소 id
-    bike_stop_id = models.IntegerField()
-    # 요일 구분
+    bike_stop_id = models.IntegerField(blank=True, null=True)
     day_of_week = models.CharField(max_length=10, blank=True, null=True)
-    # 시간대
     time = models.IntegerField(blank=True, null=True)
-    # 총합 이용량
     sum_quantity = models.IntegerField(blank=True, null=True)
 
     class Meta:
@@ -348,8 +327,8 @@ class TransportationBus(models.Model):
 class TransportationMetro(models.Model):
     transportation_metro_id = models.AutoField(primary_key=True)
     day_of_week = models.CharField(max_length=10, blank=True, null=True)
-    depart_metro_station_id = models.IntegerField(blank=True, null=True)
-    arrival_metro_station_id = models.IntegerField(blank=True, null=True)
+    depart_metro_station = models.ForeignKey(MetroStation, models.DO_NOTHING, blank=True, null=True)
+    arrival_metro_station = models.ForeignKey(MetroStation, models.DO_NOTHING, blank=True, null=True)
     metro_00_01 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
     metro_01_02 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
     metro_02_03 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)

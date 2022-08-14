@@ -18,9 +18,10 @@ from django.urls import path
 from index import views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home),
-    path('ch_usr/', views.change_user),
+    path('/', views.home),
+    path('ontimes/',views.stream_keyword),
+    path('chusr/', views.change_user),
     path('vouchers', views.vouchers),
-    path('rent_tops/', views.rent_tops),
+    path('renttops/', views.rent_tops),
     path('events/', views.events),
 ]
