@@ -15,6 +15,12 @@ import datetime
 # spark_version = '3.2.2'
 # os.environ['PYSPARK_SUBMIT_ARGS'] = '--packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.2.2'
 
+user="root"
+password="1234"
+url = "jdbc:mysql://localhost:3306/ubuntu"
+driver = "com.mysql.cj.jdbc.Driver"
+dbtable="RENTAL_PER_YEAR"
+
 # Session 생성
 spark = SparkSession.builder.appName('Stream_bikes').getOrCreate()
 
@@ -37,7 +43,7 @@ schemas = StructType([ \
 # read stream - Dataframe, kafka와 커넥트
 stream_kafka_df = spark.readStream.format("kafka")\
     .option("kafka.bootstrap.servers", "ubuntu:9091,ubuntu:9092,ubuntu:9093")\
-    .option('subscribe','stream_bikes')\
+    .option('subscribe','stream_bikes2')\
     .option('startingOffsets','earliest')\
     .load()
 
@@ -65,11 +71,11 @@ load_stream_df=select_stream_df.drop("lat","lot","stationName")\
 #  |-- per_share: string (nullable = true)
 
 query = load_stream_df.writeStream\
-    .format("console")\
+    .jdbc(url, dbtable, "append", properties={"driver":driver, "user": user, "password": password})\
     .outputMode("append")\
     .option("checkpointLocation",".checkpoint")\
     .start()
-
+    
 query.awaitTermination()
 
 

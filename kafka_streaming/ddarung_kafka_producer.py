@@ -50,7 +50,7 @@ while True:
     
     time.sleep(2)
     
-    producer.send('stream_bikes',value=ontime_datas)
+    producer.send('stream_bikes2',value=ontime_datas)
     producer.flush()
     
     print('success')
