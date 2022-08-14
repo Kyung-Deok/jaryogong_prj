@@ -46,7 +46,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -164,3 +164,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 ACCOUNT_SESSION_REMEMBER = True
 SESSION_COOKIE_AGE = 3600
+APPEND_SLASH=False
+
+# AUTH_USER_MODEL = 'index.TransportationMetro'
