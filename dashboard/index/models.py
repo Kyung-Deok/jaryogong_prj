@@ -327,8 +327,8 @@ class TransportationBus(models.Model):
 class TransportationMetro(models.Model):
     transportation_metro_id = models.AutoField(primary_key=True)
     day_of_week = models.CharField(max_length=10, blank=True, null=True)
-    depart_metro_station = models.ForeignKey(MetroStation, models.DO_NOTHING, blank=True, null=True)
-    arrival_metro_station = models.ForeignKey(MetroStation, models.DO_NOTHING, blank=True, null=True)
+    depart_metro_station_id = models.IntegerField(blank=True, null=True)
+    arrival_metro_station_id = models.IntegerField(blank=True, null=True)
     metro_00_01 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
     metro_01_02 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
     metro_02_03 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)

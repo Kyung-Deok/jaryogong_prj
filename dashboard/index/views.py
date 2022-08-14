@@ -173,14 +173,15 @@ def events(request):
             # 이벤트가 있었던 장소
             event_loc = event_times.filter(event_addr__in=seoul_gu)
             # 이벤트를 갯수
-            event_counts = event_loc.aggregate(event_counts=('rental_record_per_hour_id').count())
+            # event_counts = event_loc.aggregate(event_counts=('rental_record_per_hour_id').count())
+            
 
             data = {
-                'event_dates': event_dates, # 이벤트 날짜
-                'event_times': event_times, # 이벤트 시간
-                'event_loc': event_loc, # 이벤트 장소
-                'event_counts': event_counts # 이벤트 숫자
+                'event_dates': event_dates, # 이벤트 날짜들
+                'event_times': event_times, # 이벤트 시간 : 10-11시
+                'event_loc': event_loc, # 이벤트 장소 : 구단위
             }
+            
             return JsonResponse(data, json_dumps_params={'ensure_ascii': False}, status=200) 
         else:
             return JsonResponse({"data":"test"}, json_dumps_params={'ensure_ascii': False}, status=200) 
