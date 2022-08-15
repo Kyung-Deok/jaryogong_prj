@@ -1,3 +1,10 @@
+# This is an auto-generated Django model module.
+# You'll have to do the following manually to clean this up:
+#   * Rearrange models' order
+#   * Make sure each model has one field with primary_key=True
+#   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
+#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
+# Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 
 
@@ -210,19 +217,6 @@ class Hangjungdong(models.Model):
         db_table = 'hangjungdong'
 
 
-class JaryogongDjangoTesthostpitallocation(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    public_or_privates = models.CharField(max_length=20)
-    categories = models.CharField(max_length=20)
-    address = models.CharField(max_length=150)
-    latitude = models.DecimalField(max_digits=15, decimal_places=6)
-    longitude = models.DecimalField(max_digits=15, decimal_places=6)
-
-    class Meta:
-        managed = False
-        db_table = 'jaryogong_django_testhostpitallocation'
-
-
 class MetroStation(models.Model):
     metro_station_id = models.IntegerField(primary_key=True)
     metro_station_name = models.CharField(max_length=200, blank=True, null=True)
@@ -287,6 +281,21 @@ class SumQuantityPerHourStop(models.Model):
     class Meta:
         managed = False
         db_table = 'sum_quantity_per_hour_stop'
+
+
+class SumStop(models.Model):
+    sum_quantity_hour_id = models.IntegerField()
+    bike_stop_id = models.IntegerField(blank=True, null=True)
+    day_of_week = models.CharField(max_length=10, db_collation='utf8_general_ci', blank=True, null=True)
+    time = models.IntegerField(blank=True, null=True)
+    sum_quantity = models.IntegerField(blank=True, null=True)
+    bike_stop_code = models.TextField(db_collation='utf8mb4_unicode_ci', blank=True, null=True)
+    bike_stop_lat = models.DecimalField(max_digits=6, decimal_places=4, blank=True, null=True)
+    bike_stop_lot = models.DecimalField(max_digits=7, decimal_places=4, blank=True, null=True)
+
+    class Meta:
+        managed = False  # Created from a view. Don't remove.
+        db_table = 'sum_stop'
 
 
 class TransportationBus(models.Model):
