@@ -24,4 +24,5 @@ urlpatterns = [
     path('vouchers', views.vouchers),
     path('renttops/', views.rent_tops),
     path('events/', views.events),
+    path('traffics/',views.trans_traffic),
 ]
