@@ -18,7 +18,7 @@ from django.urls import path
 from index import views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('/', views.home),
+    path('', views.home),
     path('ontimes/',views.stream_keyword),
     path('chusr/', views.change_user),
     path('vouchers', views.vouchers),
