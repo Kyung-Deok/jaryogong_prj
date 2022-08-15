@@ -1,10 +1,9 @@
 import django
-from sqlite3 import OperationalError
 from time import time
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.db.models import Sum, Avg,Q
-from .models import AvgQuantityVoucher, OntimeRentalInfo, RentalPerYear, RentalRecordPerHour, SumQuantityPerHourStop
+from .models import AvgQuantityVoucher, BikeStopInformation, OntimeRentalInfo, RentalPerYear, RentalRecordPerHour, SumQuantityPerHourStop
 import datetime
 # Create your views here.
 
@@ -121,7 +120,7 @@ def rent_tops(request):
             # 대여소id, 기준요일을 가져온다, 해당요일에 해당하는, 옆에 Sum
             data={}
             # 기준일에 대한 요일에 따른 데이터를 집어온다.
-            select_of_days = SumQuantityPerHourStop.objects.filter(day_of_week=choice_day_week)
+            select_of_days = SumQuantityPerHourStop.objects.get("sum_quantity").filter(day_of_week=choice_day)
             
             # 집계한다. 시간대별 총 데이터
             for i in range(0,25):
@@ -154,6 +153,7 @@ def events(request):
             seoul_gu = ['강남구', '강동구', '강북구', '강서구', '관악구', '광진구', '구로구', '금천구', '노원구', '도봉구', 
                 '동대문구', '동작구', '마포구', '서대문구', '서초구', '성동구', '성북구', '송파구', '양천구', '영등포구', 
                 '용산구', '은평구', '종로구', '중구', '중랑구']
+            data={}
             
             # 이벤트 날짜 선택
             choice_day = request.POST.get('event_ref_date', None)
@@ -167,23 +167,37 @@ def events(request):
                 event_day_of_week = days_of_weeks[event_date] # 이벤트가 있었던 날의 요일
 
             # 이벤트가 있었던 일자 선택 
-            event_dates = RentalRecordPerHour.objects.filter(ref_date=choice_day)
+            event_dates = RentalRecordPerHour.objects.filter(date=choice_day)
             # 이벤트가 있었던 시간대 이용량 집계
             event_times = event_dates.filter(Q(ref_time='22') | Q(ref_time='23'))
             # 이벤트가 있었던 장소
             event_loc = event_times.filter(event_addr__in=seoul_gu)
-            # 이벤트를 갯수
-            # event_counts = event_loc.aggregate(event_counts=('rental_record_per_hour_id').count())
-            
 
-            data = {
-                'event_dates': event_dates, # 이벤트 날짜들
-                'event_times': event_times, # 이벤트 시간 : 10-11시
-                'event_loc': event_loc, # 이벤트 장소 : 구단위
-            }
+            # 요일에 맞는 총 이용량(대여소 별로)
+            # sum_day_of_week = SumQuantityPerHourStop.objects.get('sum_quantity').filter(days_of_week=event_day_of_week)
+            select_of_days = SumQuantityPerHourStop.objects.filter(day_of_week=choice_day)
+            
+            # 집계한다. 시간대별 총 데이터
+            for i in range(0,25):
+                # 요일마다 시간별.
+                select_times = select_of_days.filter(time=i)
+                data[f'select_{i}_times'] = select_times
+                # 정해진 시간 별로 합계
+                sum_times = select_times.aggregate(sums=Sum(i))
+                data[f'sum_{i}_times'] = sum_times
+            # 이벤트가 일어난 주변 대여소의 대여량을 본다
+            bike_stop_info = BikeStopInformation.objects.filter(bike_stop_id__in=select_of_days.get("bike_stop_id"))
+            
+            data['event_dates']= event_dates # 이벤트 날짜들
+            data['event_times']= event_times # 이벤트 시간 : 10-11시
+            data['event_loc']= event_loc # 이벤트 장소 : 구단위
+            data['bike_stop_info'] = bike_stop_info # 그 주변 대여소?             
             
             return JsonResponse(data, json_dumps_params={'ensure_ascii': False}, status=200) 
         else:
             return JsonResponse({"data":"test"}, json_dumps_params={'ensure_ascii': False}, status=200) 
     except ValueError:
-        return JsonResponse({'err':'value error'},status=400)   
+        return JsonResponse({'err':'value error'},status=400)
+    
+def trans_traffic(request):
+    pass
