@@ -171,10 +171,13 @@ def events(request):
 
             # 이벤트가 있었던 일자에 평소 사용량
             sum_usual_dates = SumQuantityPerHourStop.objects.filter(days_of_weeks=event_day_of_week).values("sum_quantity")
-            # 선택한 이벤트 
-            filter_addr = choice_addr.split(' ')
-            sum_event_dates = SumQuantityPerHourStop.objects.filter(Q(days_of_weeks=event_day_of_week) & Q())
+            # 이벤트가 있었던 일자에 시간대 별 사용량
+            sum_event_dates = "대여소/일자별/시간대".objects.filter(days_of_weeks=event_day_of_week).aggregate(sum_events=Sum("sum_quantity"))
 
+            res_data ={
+                'sum_usual_datas' : sum_event_dates,
+                'sum_event_datas' : sum_event_dates,
+            }
 
             return JsonResponse(data, json_dumps_params={'ensure_ascii': False}, status=200) 
     except ValueError:
