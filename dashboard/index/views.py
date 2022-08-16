@@ -5,7 +5,7 @@ from time import time
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.db.models import Sum, Avg,Q
-from .models import AvgQuantityVoucher, BikeStopInformation, Event, OntimeRentalInfo, RentalPerYear, RentalRecordPerHour, SumQuantityPerHourStop
+from .models import AvgQuantityVoucher, BikeStopInformation, Event, OntimeRentalInfo, RentalPerYear, RentalRecordPerHour, SumQuantityPerHourStop, TransportationBus
 import datetime
 # Create your views here.
 
@@ -198,6 +198,41 @@ def events(request):
         return JsonResponse({'err': str(err)},status=400)
     
 def trans_traffic(request):
-    pass
+    try:
+        # 화면 먼저 렌더 해야 한다.
+        if request.method == 'GET' :
+            return JsonResponse({"data": "일단 render해야 함"}, status=200, json_dumps_params={'ensure_ascii': False})
+        else :
+            #요일별 
+            days_of_weeks= ['Mon','Tue', 'Wen', 'Thu','Fri','Sat','Sun']
+            choice_days = request.POST.get('choicedays',None)
+            if choice_days is None :
+                choice_days_t = datetime.datetime.today().weekday()
+                choice_day_week = days_of_weeks[choice_days_t]
+            choice_daysf = datetime.datetime.strptime(choice_days,'%Y-%m-%d').weekday()
+            choice_day_week = days_of_weeks[choice_daysf]
+            
+            pprint(choice_day_week)
+            # 대여소id, 기준요일을 가져온다, 해당요일에 해당하는, 옆에 Sum
+            data={}
+            # 기준일에 대한 요일에 따른 데이터를 집어온다 : x요일에 대여소 별로 시간 별로 찍힌것
+            select_of_days = TransportationBus.objects.filter(day_of_week=choice_day_week).values('time','passenger')
+            print(len(list(select_of_days))) #65000여개
+            # 집계한다. 시간대별 총 데이터
+            select_times_list=[]
+            for i in range(0,24):
+                # 요일마다 시간별
+                select_times = select_of_days.filter(time=i).aggregate(sum_data=Sum('passenger'))
+                select_times_list.append(select_times)
+                # top 5
+                top_bike_stops=select_of_days.filter(time=i).order_by('-sum_quantity').values('transportatin_bus_id')[0:5]
+            data['select_times_list']=list(select_times_list)
+            data['top_bus_stops']=list(top_bike_stops)
+            return JsonResponse(data, json_dumps_params={'ensure_ascii': False}, status=200) 
 
+    except django.db.utils.OperationalError:
+        return JsonResponse({'err':"테이블 없음"}, status=400)
+    except Exception as err:
+        return JsonResponse({'err': str(err)}, status=400)
+    
 
