@@ -1,9 +1,7 @@
 from pyspark.sql.types import *
-from pyspark import SparkContext
 from pyspark.sql import SparkSession
 import sys
 
-sc = SparkContext()
 spark = SparkSession.builder.getOrCreate()
 
 user="root"
@@ -22,7 +20,7 @@ hjd_columns = StructType([
 ])
 
 # 지정한 컬럼명과 타입으로 불러오기
-hjd = spark.read.format('csv').option('header', 'true').schema(hjd_columns).load('hangjungdong.csv')
+hjd = spark.read.format('csv').option('header', 'true').schema(hjd_columns).load('hdfs://localhost:9000/home/ubuntu/file_data/csv/행정동코드_매핑정보_행정동코드.csv')
 
 # 1행 삭제
 hjd = hjd.na.drop()
@@ -36,4 +34,5 @@ hjd = hjd.drop(hjd[1])
 # 저장
 hjd.write.jdbc(url, dbtable, "append", properties={"driver":driver, "user": user, "password": password})
 
-
+# spark 종료
+spark.stop()
