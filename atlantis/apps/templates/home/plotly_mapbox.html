@@ -1,0 +1,65 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block javascripts %}
+<script>
+	function checkForm() {
+		var ages_datas = [];
+
+		$('input:checkbox[name=ages]:checked').each(function() {
+			ages_datas.push(this.value);
+		});
+
+	}
+
+
+</script>
+{% endblock javascripts %}
+
+{% block content %}
+    <div class="content">
+        <div class="panel-header bg-primary-gradient">
+			<div class="page-inner py-5">
+				<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
+					<div>
+						<h2 class="text-white pb-2 fw-bold">자료공2조 Dashboard</h2>
+					</div>
+				</div>
+			</div>
+		</div>
+        <div class="page-inner mt--5">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">인구분포도 지도
+							</div>
+						</div>
+						{% if population_map %}				
+						<div class="card-body" style="min-height: 300px;">
+                            {{ population_map | safe }}
+						</div>
+						{% endif %}
+					</div>
+				</div>				
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">주거/직장 구분 지도
+							</div>
+						</div>
+						{% if building_map %}				
+						<div class="card-body" style="min-height: 300px;">
+                            {{ building_map | safe }}
+						</div>
+						{% endif %}
+					</div>
+				</div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}                           
