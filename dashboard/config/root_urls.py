@@ -18,11 +18,12 @@ from django.urls import path
 from index import views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home),
-    path('ontimes/',views.stream_keyword),
-    path('years/', views.years_of_user),
-    path('vouchers/', views.vouchers),  
-    path('renttops/', views.rent_tops),
-    path('events/', views.events),
-    path('traffics/',views.trans_traffic),
+    path('', views.index, name="home"),
+    # path('ontimes/',views.stream_keyword),
+    # path('years/', views.years_of_user),
+    # path('vouchers/', views.vouchers),  
+    # path('renttops/', views.rent_tops),
+    # path('events/', views.events),
+    # path('traffics/',views.trans_traffic),
+    path('plotly_mapbox/', views.plotly_mapbox, name='plotly_mapbox'),
 ]

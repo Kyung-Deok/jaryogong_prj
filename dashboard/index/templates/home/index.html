@@ -1,0 +1,669 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+			
+	<div class="content">
+		<div class="panel-header bg-primary-gradient">
+			<div class="page-inner py-5">
+				<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
+					<div>
+						<h2 class="text-white pb-2 fw-bold">자료공2조 Dashboard</h2>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Card With Icon States Color -->
+		<div class="row">
+			<div class="col-sm-6 col-md-3">
+				<div class="card card-stats card-round">
+					<div class="card-body ">
+						<div class="row">
+							<div class="col-5">
+								<div class="icon-big text-center">
+									<i class="flaticon-chart-pie text-warning"></i>
+								</div>
+							</div>
+							<div class="col-7 col-stats">
+								<div class="numbers">
+									<p class="card-category">오늘의 대여 총합</p>
+									<h4 class="card-title">{{data.stream_keyword.rent_total.sum_data}}</h4>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6 col-md-3">
+				<div class="card card-stats card-round">
+					<div class="card-body ">
+						<div class="row">
+							<div class="col-5">
+								<div class="icon-big text-center">
+									<i class="flaticon-chart-pie text-warning"></i>
+								</div>
+							</div>
+							<div class="col-7 col-stats">
+								<div class="numbers">
+									<p class="card-category">대여 Top 5</p>
+									<h4 class="card-title">{{data.stream_keyword.rent_top5}}</h4>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6 col-md-3">
+				<div class="card card-stats card-round">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-5">
+								<div class="icon-big text-center">
+									<i class="flaticon-chart-pie text-warning"></i>
+								</div>
+							</div>
+							<div class="col-7 col-stats">
+								<div class="numbers">
+									<p class="card-category">거치율 100% 이상</p>
+									<h4 class="card-title">{{data.stream_keyword.parking_higher}}</h4>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6 col-md-3">
+				<div class="card card-stats card-round">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-5">
+								<div class="icon-big text-center">
+									<i class="flaticon-chart-pie text-warning"></i>
+								</div>
+							</div>
+							<div class="col-7 col-stats">
+								<div class="numbers">
+									<p class="card-category">거치율 50% 이하</p>
+									<h4 class="card-title">{{data.stream_keyword.parking_lower}}</h4>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+				<div class="card card-stats card-round">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-stats">
+						<input type="date" id="ww" name="date_event_datas">
+						<button id='tt' type="submit">go!</button>
+							</div>
+						</div>
+					</div>
+				</div>				
+		<div class="page-inner mt--5">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">따릉이 이용자 증감 추이</div>
+						</div>
+						<div class="card-body" style="min-height: 300px;">
+							<div class="chart-container">
+								<canvas id="lineChart" style="height: 300px;"></canvas>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-head-row">
+								<div class="card-title">이벤트</div>
+							</div>
+						</div>
+						<div class="card-body" style="min-height: 340px;">
+							<div class="chart-container" style="height: 300px">
+								<canvas id="statisticsChart"></canvas>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">시간대별 이용량</div>
+						</div>
+						<div class="card-body" style="height: 720px;">
+							<div class="chart-container">
+								<canvas id="multipleBarChart" style="height:650px;"></canvas>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">이용권</div>
+						</div>
+						<div class="card-body">
+							<h2 style="color:#FFFFFF">출근(7-9시)</h2>
+							<div class="chart-container">
+								<canvas id="pieChart1" style="width: 1%; height: 1%"></canvas>
+							</div>
+							<h2 style="color:#FFFFFF">퇴근(18-20시)</h2>
+							<div class="chart-container">
+								<canvas id="pieChart2" style="width: 10%; height: 10%"></canvas>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">대중교통 및 따릉이 이용량</div>
+						</div>
+						<div class="card-body">
+							<div class="chart-container">
+								<canvas id="multipleLineChart"></canvas>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+
+{% block javascripts %}
+
+
+<script>
+
+$('#tt').on('click', function(e) {
+	var choice_result=$("#ww").val() // 날짜 값
+	console.log(choice_result)
+	$.ajax({ // 요청 버튼이 켜질때마다 
+		url: "{% url 'home' %}", // 요 url로 요청을 합니다
+		dataType: 'json', //받는건 요렇게 
+		type: "POST", // 요타입으로 
+		data: {"choice_one" : choice_result}, // 요 데이터 보낼겁니다
+		success : function(context) {
+			console.log(context)
+			$('#pieChart1').remove()
+			$('#chart-container').append('<canvas id="pieChart1" style="width: 50%; height: 50%"></canvas>')
+			var vouchers = context.vouchers
+			var rent_tops = context.rent_tops
+			var events = context.events
+			console.log(vouchers, rent_tops)
+
+			
+			var myPieChart1 = new Chart(pieChart1, {
+				type: 'pie',
+				data: {
+					datasets: [{
+						data: [{{voucers.d_avg_morning.sum_data}},{{voucers.r_avg_morning.sum_data}}, {{voucers.n_avg_morning.sum_data}}],
+						backgroundColor :["#1d7af3","#f3545d","#84CC00"],
+						borderWidth: 0
+					}],
+					labels: ['정기권', '일일권','일일권(비회원)'] 
+				},
+				options : {
+					responsive: true, 
+					maintainAspectRatio: false,
+					legend: {
+						position : 'right',
+						labels : {
+							fontColor: '#FFFFFF',
+							fontSize: 20,
+							usePointStyle : true,
+							padding: 20
+						}
+					},
+					pieceLabel: {
+						fontColor: '#FFFFFF',
+						render: 'percentage',
+						fontSize: 30
+					},
+					tooltips: false,
+					layout: {
+						padding: {
+							left: 20,
+							right: 20,
+							top: 20,
+							bottom: 20
+						}
+					}
+				}
+			})
+			$('#pieChart2').remove()
+			$('#chart-container').append('<canvas id="pieChart1" style="width: 50%; height: 50%"></canvas>')
+			var myPieChart2 = new Chart(pieChart2, {
+				type: 'pie',
+				data: {
+					datasets: [{
+						data: [vouchers.d_avg_evening.sum_data,{{vouchers.r_avg_evening.sum_data}}, {{vouchers.n_avg_evening.sum_data}} ],
+						backgroundColor :["#1d7af3","#f3545d","#84CC00"],
+						borderWidth: 0
+					}],
+					labels: ['정기권', '일일권', '일일권(비회원)'] 
+				},
+				options : {
+					responsive: true, 
+					maintainAspectRatio: false,
+					legend: {
+						position : 'right',
+						labels : {
+							fontColor: '#FFFFFF',
+							fontSize: 20,
+							usePointStyle : true,
+							padding: 20
+						}
+					},
+					pieceLabel: {
+						fontColor: '#FFFFFF',
+						render: 'percentage',
+						fontSize: 30
+					},
+					tooltips: false,
+					layout: {
+						padding: {
+							left: 20,
+							right: 20,
+							top: 20,
+							bottom: 20
+						}
+					}
+				}
+			})
+
+		},
+		error: function(req,status,err) {
+			console.log(err)
+			console.log(req.requestText)
+			console.log(req.statusText)
+		}
+
+	})
+})
+
+
+var myLineChart = new Chart(lineChart, {
+			type: 'line',
+			data: {
+				labels: ['', '2019', '2020', '2021', ''],
+				datasets: [{
+					label: "연도별 따릉이 이용자 수",
+					borderColor: "#1d7af3",
+					pointBorderColor: "#FFF",
+					pointBackgroundColor: "#1d7af3",
+					pointBorderWidth: 2,
+					pointHoverRadius: 4,
+					pointHoverBorderWidth: 1,
+					pointRadius: 4,
+					backgroundColor: 'transparent',
+					fill: true,
+					borderWidth: 2,
+						data: [null, {{ data.years_of_user.total_2019.sum_years }},{{ data.years_of_user.total_2020.sum_years }}, {{  data.years_of_user.total_2021.sum_years  }} ,null]
+					}]
+			},
+			options : {
+				responsive: true, 
+				maintainAspectRatio: false,
+				scales: {
+					xAxes: [{
+						ticks: {
+							fontSize : 20,
+							fontColor : '#FFFFFF'
+						}
+					}],
+					yAxes: [{
+						ticks: {
+							fontSize : 20,
+							fontColor : '#FFFFFF'
+						}
+					}]
+				},
+				legend: {
+					position: 'bottom',
+					labels : {
+						padding: 10,
+						fontColor: '#FFFFFF',
+						fontSize: 20
+					}
+				},
+				tooltips: {
+					bodySpacing: 4,
+					mode:"nearest",
+					intersect: 0,
+					position:"nearest",
+					xPadding:10,
+					yPadding:10,
+					caretPadding:10
+				},
+				layout:{
+					padding:{left:15,right:15,top:15,bottom:15}
+				}
+			}
+		});
+
+var myPieChart1 = new Chart(pieChart1, {
+	type: 'pie',
+	data: {
+		datasets: [{
+			data: [Number({{data.vouchers.d_avg_morning.sum_data}}/100), Number({{data.vouchers.r_avg_morning.sum_data}}/100), Number({{data.vouchers.n_avg_morning.sum_data}}/100)],
+			backgroundColor :["#1d7af3","#f3545d","#84CC00"],
+			borderWidth: 0
+		}],
+		labels: ['일일권', '정기권','일일권(비회원)'] 
+	},
+	options : {
+		responsive: true, 
+		maintainAspectRatio: false,
+		legend: {
+			position : 'right',
+			labels : {
+				fontColor: '#FFFFFF',
+				fontSize: 20,
+				usePointStyle : true,
+				padding: 20
+			}
+		},
+		pieceLabel: {
+			fontColor: '#FFFFFF',
+			render: 'percentage',
+			fontSize: 30
+		},
+		tooltips: false,
+		layout: {
+			padding: {
+				left: 10,
+				right: 10,
+				top: 10,
+				bottom: 10
+			}
+		}
+	}
+})
+
+var myPieChart2 = new Chart(pieChart2, {
+	type: 'pie',
+	data: {
+		datasets: [{
+			data: [Number({{data.vouchers.d_avg_evenning.sum_data}}/100), Number({{data.vouchers.r_avg_evenning.sum_data}}/100), Number({{data.vouchers.n_avg_evenning.sum_data}}/100)],
+			backgroundColor :["#1d7af3","#f3545d","#84CC00"],
+			borderWidth: 0
+		}],
+		labels: ['일일권', '정기권', '일일권(비회원)'] 
+	},
+	options : {
+		responsive: true, 
+		maintainAspectRatio: false,
+		legend: {
+			position : 'right',
+			labels : {
+				fontColor: '#FFFFFF',
+				fontSize: 20,
+				usePointStyle : true,
+				padding: 20
+			}
+		},
+		pieceLabel: {
+			fontColor: '#FFFFFF',
+			render: 'percentage',
+			fontSize: 30
+		},
+		tooltips: false,
+		layout: {
+			padding: {
+				left: 10,
+				right: 10,
+				top: 10,
+				bottom: 10
+			}
+		}
+	}
+})
+
+
+var myMultipleLineChart = new Chart(multipleLineChart, {
+	type: 'line',
+	data: {
+		labels: ['0시', '01시', '02시', '03시', '04시', '05시', '06시', '07시', '08시', '09시', '10시', '11시', '12시', '13시', '14시', '15시', '16시', '17시', '18시', '19시', '20시', '21시', '22시', '23시'],
+		datasets: [{
+			label: "지하철",
+			borderColor: "#59d05d",
+			pointBorderColor: "#FFF",
+			pointBackgroundColor: "#59d05d",
+			pointBorderWidth: 2,
+			pointHoverRadius: 4,
+			pointHoverBorderWidth: 1,
+			pointRadius: 4,
+			backgroundColor: 'transparent',
+			fill: true,
+			borderWidth: 2,
+			data: [ 0, 14583 , 108 , 30 , 0 , 192604 , 6475718 , 14246396 , 37139014 , 42696258 , 25724941 , 18832516, 19103405, 21151966,21695211, 21797934, 24113851, 28104761 , 37105042 ,48011301 , 24477786 ,20165979 ,20241142 ,12209664]
+		}, {
+			label: "따릉이",
+			borderColor: "#f3545d",
+			pointBorderColor: "#FFF",
+			pointBackgroundColor: "#f3545d",
+			pointBorderWidth: 2,
+			pointHoverRadius: 4,
+			pointHoverBorderWidth: 1,
+			pointRadius: 4,
+			backgroundColor: 'transparent',
+			fill: true,
+			borderWidth: 2,
+			data: [{% for i in data.rent_tops.select_times_list %}{{ i.sum_data }}*10,{% endfor %}]
+		}]
+	},
+	options : {
+		responsive: true, 
+		maintainAspectRatio: false,
+		legend: {
+			position: 'bottom',
+			labels : {
+				fontColor: '#FFFFFF',
+				fontSize: 20,
+				padding: 20
+			}
+		},
+		tooltips: {
+			bodySpacing: 4,
+			mode:"nearest",
+			intersect: 0,
+			position:"nearest",
+			xPadding:10,
+			yPadding:10,
+			caretPadding:10
+		},
+		layout:{
+			padding:{left:15,right:15,top:15,bottom:15}
+		},
+		scales: {
+			xAxes: [{
+				ticks: {
+					fontSize : 18,
+					fontColor : '#FFFFFF'
+				}
+			}],
+			yAxes: [{
+				ticks: {
+					fontSize : 18,
+					fontColor : '#FFFFFF'
+				}
+			}]
+		},
+	}
+});
+
+var myMultipleBarChart = new Chart(multipleBarChart, {
+
+	type: 'bar',
+	data: {
+		labels: ['0시', '01시', '02시', '03시', '04시', '05시', '06시', '07시', '08시', '09시', '10시', '11시', '12시', '13시', '14시', '15시', '16시', '17시', '18시', '19시', '20시', '21시', '22시', '23시'],
+		datasets : [{
+			label: "이용량",
+			backgroundColor: '#59d05d',
+			borderColor: '#59d05d',
+			data: [{% for i in data.rent_tops.select_times_list %}{{ i.sum_data }},{% endfor %}],
+		}],
+	},
+	options: {
+		responsive: true, 
+		maintainAspectRatio: false,
+		legend: {
+			position : 'bottom',
+			labels : {
+				fontColor: '#FFFFFF',
+				fontSize: 20,
+				padding: 20
+			}
+		},
+		title: {
+			display: true,
+			text: '시간대별 따릉이 이용량',
+			fontSize: 20,
+			fontColor: '#FFFFFF'
+		},
+		tooltips: {
+			mode: 'dataset',
+			intersect: false
+		},
+		responsive: true,
+		scales: {
+			xAxes: [{
+				ticks: {
+					fontSize : 20,
+					fontColor : '#FFFFFF'
+				}
+			}],
+			yAxes: [{
+				ticks: {
+					fontSize : 20,
+					fontColor : '#FFFFFF'
+				}
+			}]
+		}
+	}
+});
+
+var ctx = document.getElementById('statisticsChart').getContext('2d');
+
+var statisticsChart = new Chart(ctx, {
+	type: 'line',
+	data: {
+		labels: ['0시', '01시', '02시', '03시', '04시', '05시', '06시', '07시', '08시', '09시', '10시', '11시', '12시', '13시', '14시', '15시', '16시', '17시', '18시', '19시', '20시', '21시', '22시', '23시'],
+		datasets: [{
+			label: "이벤트 장소 근처 대여량",
+			borderColor: '#f3545d',
+			pointBackgroundColor: 'rgba(243, 84, 93, 0.6)',
+			pointRadius: 0,
+			backgroundColor: 'rgba(243, 84, 93, 0.4)',
+			legendColor: '#f3545d',
+			fill: true,
+			borderWidth: 2,
+			data: [{% for i in data.events.sum_event_datas %}{{ i.sum_data }}, {% endfor %}]
+		}, {
+			label: "평균 대여량",
+			borderColor: '#177dff',
+			pointBackgroundColor: 'rgba(23, 125, 255, 0.6)',
+			pointRadius: 0,
+			backgroundColor: 'rgba(23, 125, 255, 0.4)',
+			legendColor: '#177dff',
+			fill: true,
+			borderWidth: 2,
+			data: [{% for i in data.events.sum_usual_datas %}{{ i.sum_data }}, {% endfor %}]
+		}]
+	},
+	options : {
+		responsive: true, 
+		maintainAspectRatio: false,
+		legend: {
+			position : 'bottom',
+			labels : {
+				fontColor: '#FFFFFF',
+				fontSize: 20,
+				padding: 20
+			}
+		},
+		tooltips: {
+			bodySpacing: 4,
+			mode:"nearest",
+			intersect: 0,
+			position:"nearest",
+			xPadding:10,
+			yPadding:10,
+			caretPadding:10
+		},
+		layout:{
+			padding:{left:5,right:5,top:15,bottom:15}
+		},
+		scales: {
+			yAxes: [{
+				ticks: {
+					fontStyle: "500",
+					beginAtZero: false,
+					maxTicksLimit: 5,
+					padding: 10,
+					fontSize: 16,
+					fontColor: '#FFFFFF'
+				},
+				gridLines: {
+					drawTicks: false,
+					display: false
+				}
+			}],
+			xAxes: [{
+				gridLines: {
+					zeroLineColor: "transparent"
+				},
+				ticks: {
+					padding: 10,
+					fontStyle: "500",
+					fontSize: 18,
+					fontColor: '#FFFFFF'
+				}
+			}]
+		}, 
+		legendCallback: function(chart) { 
+			var text = []; 
+			text.push('<ul class="' + chart.id + '-legend html-legend">'); 
+			for (var i = 0; i < chart.data.datasets.length; i++) { 
+				text.push('<li><span style="background-color:' + chart.data.datasets[i].legendColor + '"></span>'); 
+				if (chart.data.datasets[i].label) { 
+					text.push(chart.data.datasets[i].label); 
+				} 
+				text.push('</li>'); 
+			} 
+			text.push('</ul>'); 
+			return text.join(''); 
+		}  
+	}
+});
+
+var myLegendContainer = document.getElementById("myChartLegend");
+
+// generate HTML legend
+// myLegendContainer.innerHTML = statisticsChart.generateLegend();
+
+// bind onClick event to all LI-tags of the legend
+// var legendItems = myLegendContainer.getElementsByTagName('li');
+
+
+//for (var i = 0; i < legendItems.length; i += 1) {
+//	legendItems[i].addEventListener("click", legendClickCallback, false);
+//}
+
+</script>
+
+{% endblock javascripts %}
