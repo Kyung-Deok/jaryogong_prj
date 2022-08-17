@@ -10,6 +10,7 @@ urlpatterns = [
 
     # The home page
     path('', views.index, name='home'),
+    path('plotly_mapbox/', views.plotly_mapbox, name='plotly_mapbox'),
     # Matches any html file
     # re_path(r'^.*\.*', views.pages, name='pages'),
 
