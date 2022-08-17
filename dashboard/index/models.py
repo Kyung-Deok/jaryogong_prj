@@ -1,8 +1,13 @@
+# This is an auto-generated Django model module.
+# You'll have to do the following manually to clean this up:
+#   * Rearrange models' order
+#   * Make sure each model has one field with primary_key=True
+#   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
+#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
+# Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 
-# 연간이용량
 
-# 시간당 이용량
 class RentalRecordPerHour(models.Model):
     rental_record_per_hour_id = models.AutoField(primary_key=True)
     ref_date = models.DateField(blank=True, null=True)
@@ -83,7 +88,7 @@ class AuthUserUserPermissions(models.Model):
         db_table = 'auth_user_user_permissions'
         unique_together = (('user', 'permission'),)
 
-#연령별 평균 이용량
+
 class AvgQuantityAge(models.Model):
     avg_age_id = models.AutoField(primary_key=True)
     day_of_week = models.CharField(max_length=10, blank=True, null=True)
@@ -95,17 +100,12 @@ class AvgQuantityAge(models.Model):
         managed = False
         db_table = 'avg_quantity_age'
 
-# 이용권별 평균 이용량
+
 class AvgQuantityVoucher(models.Model):
-    # 시퀀스 id
     avg_voucher_id = models.AutoField(primary_key=True)
-    # 요일 데이터 : 월~일
     day_of_week = models.CharField(max_length=10, blank=True, null=True)
-    # 시간 : 0~24
     time = models.IntegerField(blank=True, null=True)
-    # 이용권 종류
     voucher = models.CharField(max_length=50, blank=True, null=True)
-    # 평균 이용권 수량
     avg_voucher_quantity = models.FloatField(blank=True, null=True)
 
     class Meta:
@@ -113,15 +113,15 @@ class AvgQuantityVoucher(models.Model):
         db_table = 'avg_quantity_voucher'
 
 
-class BikeStopInfo(models.Model):
-    bike_stop_id = models.IntegerField(primary_key=True)
-    bike_stop_code = models.CharField(unique=True, max_length=20, blank=True, null=True)
-    bike_stop_lat = models.DecimalField(max_digits=10, decimal_places=7, blank=True, null=True)
-    bike_stop_lot = models.DecimalField(max_digits=10, decimal_places=7, blank=True, null=True)
+class BikeStopInformation(models.Model):
+    bike_stop_id = models.TextField(blank=True, null=True)
+    bike_stop_code = models.TextField(blank=True, null=True)
+    bike_stop_lat = models.DecimalField(max_digits=6, decimal_places=4, blank=True, null=True)
+    bike_stop_lot = models.DecimalField(max_digits=7, decimal_places=4, blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'bike_stop_info'
+        db_table = 'bike_stop_information'
 
 
 class Building(models.Model):
@@ -139,9 +139,9 @@ class Building(models.Model):
 
 class BusStop(models.Model):
     bus_stop_id = models.IntegerField(primary_key=True)
-    bus_stop_name = models.CharField(unique=True, max_length=200, blank=True, null=True)
-    bus_stop_lat = models.DecimalField(max_digits=10, decimal_places=7, blank=True, null=True)
-    bus_stop_lot = models.DecimalField(max_digits=10, decimal_places=7, blank=True, null=True)
+    bus_stop_name = models.CharField(max_length=200, blank=True, null=True)
+    bus_stop_lat = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
+    bus_stop_lot = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -197,7 +197,9 @@ class Event(models.Model):
     event_id = models.AutoField(primary_key=True)
     event_name = models.CharField(max_length=200, blank=True, null=True)
     event_category = models.CharField(max_length=200, blank=True, null=True)
-    event_date = models.DateField(blank=True, null=True)
+    year = models.IntegerField(blank=True, null=True)
+    month = models.IntegerField(blank=True, null=True)
+    date = models.IntegerField(blank=True, null=True)
     event_addr = models.CharField(max_length=1000, blank=True, null=True)
 
     class Meta:
@@ -215,19 +217,6 @@ class Hangjungdong(models.Model):
         db_table = 'hangjungdong'
 
 
-class JaryogongDjangoTesthostpitallocation(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    public_or_privates = models.CharField(max_length=20)
-    categories = models.CharField(max_length=20)
-    address = models.CharField(max_length=150)
-    latitude = models.DecimalField(max_digits=15, decimal_places=6)
-    longitude = models.DecimalField(max_digits=15, decimal_places=6)
-
-    class Meta:
-        managed = False
-        db_table = 'jaryogong_django_testhostpitallocation'
-
-
 class MetroStation(models.Model):
     metro_station_id = models.IntegerField(primary_key=True)
     metro_station_name = models.CharField(max_length=200, blank=True, null=True)
@@ -239,24 +228,31 @@ class MetroStation(models.Model):
         managed = False
         db_table = 'metro_station'
 
-# 실시간 데이터
+
 class OntimeRentalInfo(models.Model):
-    # 시퀀스 ID
     ontime_rental_info_id = models.AutoField(primary_key=True)
-    # 대여소 ID
     bike_stop_code = models.CharField(max_length=20, blank=True, null=True)
-    # 타임스탬프
     ontime_timestamp = models.DateTimeField()
-    # 거치대
     holder_amount = models.IntegerField(blank=True, null=True)
-    # 거치율
     parking_rate = models.IntegerField(blank=True, null=True)
-    # 거치된 자전거 수
     parking_amount = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'ontime_rental_info'
+
+
+class OntimeRentalInfo2(models.Model):
+    ontime_rental_info_id = models.AutoField(primary_key=True)
+    bike_stop_code = models.CharField(max_length=20, blank=True, null=True)
+    ontime_timestamp = models.DateTimeField()
+    holder_amount = models.IntegerField(blank=True, null=True)
+    parking_rate = models.IntegerField(blank=True, null=True)
+    parking_amount = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'ontime_rental_info_2'
 
 
 class Population(models.Model):
@@ -277,32 +273,34 @@ class Population(models.Model):
         managed = False
         db_table = 'population'
 
-#연간 이용량 데이터
+
 class RentalPerYear(models.Model):
-    # 시퀀스 id
     rental_per_year_id = models.AutoField(primary_key=True)
-    # 대여소 id
-    bike_stop_id = models.IntegerField()
-    # 연도 별 대여량
-    rental_amount_year = models.IntegerField(blank=True, null=True)
-    # 연도
-    ref_year = models.IntegerField(blank=True, null=True)
+    year = models.IntegerField(blank=True, null=True)
+    use_count = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'rental_per_year'
 
-# 팩트 테이블 따릉이 이용 데이터
-class SumQuantityPerHourStop(models.Model):
-    # 시퀀스 id
-    sum_quantity_hour_id = models.AutoField(primary_key=True)
-    # 대여소 id
-    bike_stop_id = models.IntegerField()
-    # 요일 구분
-    day_of_week = models.CharField(max_length=10, blank=True, null=True)
-    # 시간대
+
+class SumQuantityBikeStop(models.Model):
+    sum_bike_stop_id = models.AutoField(primary_key=True)
+    date = models.DateField(blank=True, null=True)
     time = models.IntegerField(blank=True, null=True)
-    # 총합 이용량
+    bike_stop_id = models.IntegerField(blank=True, null=True)
+    sum_quantity = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'sum_quantity_bike_stop'
+
+
+class SumQuantityPerHourStop(models.Model):
+    sum_quantity_hour_id = models.AutoField(primary_key=True)
+    bike_stop_id = models.IntegerField(blank=True, null=True)
+    day_of_week = models.CharField(max_length=10, blank=True, null=True)
+    time = models.IntegerField(blank=True, null=True)
     sum_quantity = models.IntegerField(blank=True, null=True)
 
     class Meta:
@@ -315,30 +313,8 @@ class TransportationBus(models.Model):
     day_of_week = models.CharField(max_length=10, blank=True, null=True)
     depart_bus_stop_id = models.IntegerField(blank=True, null=True)
     arrival_bus_stop_id = models.IntegerField(blank=True, null=True)
-    bus_00_01 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    bus_01_02 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    bus_02_03 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    bus_03_04 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    bus_04_05 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    bus_05_06 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    bus_06_07 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    bus_07_08 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    bus_08_09 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    bus_09_10 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    bus_10_11 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    bus_11_12 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    bus_12_13 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    bus_13_14 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    bus_14_15 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    bus_15_16 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    bus_16_17 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    bus_17_18 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    bus_18_19 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    bus_19_20 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    bus_20_21 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    bus_21_22 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    bus_22_23 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    bus_23_24 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
+    time = models.IntegerField(blank=True, null=True)
+    passenger = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -350,31 +326,247 @@ class TransportationMetro(models.Model):
     day_of_week = models.CharField(max_length=10, blank=True, null=True)
     depart_metro_station_id = models.IntegerField(blank=True, null=True)
     arrival_metro_station_id = models.IntegerField(blank=True, null=True)
-    metro_00_01 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    metro_01_02 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    metro_02_03 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    metro_03_04 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    metro_04_05 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    metro_05_06 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    metro_06_07 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    metro_07_08 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    metro_08_09 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    metro_09_10 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    metro_10_11 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    metro_11_12 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    metro_12_13 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    metro_13_14 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    metro_14_15 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    metro_15_16 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    metro_16_17 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    metro_17_18 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    metro_18_19 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    metro_19_20 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    metro_20_21 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    metro_21_22 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    metro_22_23 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
-    metro_23_24 = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
+    time = models.IntegerField(blank=True, null=True)
+    passenger = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'transportation_metro'
+
+
+class ViewAge(models.Model):
+    avg_age_id = models.IntegerField()
+    day_time = models.CharField(max_length=22, db_collation='utf8_general_ci', blank=True, null=True)
+    age_category = models.CharField(max_length=100, db_collation='utf8_general_ci', blank=True, null=True)
+    avg_age_quantity = models.FloatField(blank=True, null=True)
+
+    class Meta:
+        managed = False  # Created from a view. Don't remove.
+        db_table = 'view_age'
+
+
+class ViewBuilding(models.Model):
+    building_id = models.IntegerField()
+    building_category = models.CharField(max_length=200, db_collation='utf8_general_ci', blank=True, null=True)
+    building_detail = models.CharField(max_length=200, db_collation='utf8_general_ci', blank=True, null=True)
+    building_count = models.IntegerField(blank=True, null=True)
+    gu_dong = models.CharField(max_length=401, db_collation='utf8_general_ci', blank=True, null=True)
+
+    class Meta:
+        managed = False  # Created from a view. Don't remove.
+        db_table = 'view_building'
+
+
+class ViewDong(models.Model):
+    hangjungdong_id = models.IntegerField()
+    gu_dong = models.CharField(max_length=151, db_collation='utf8_general_ci', blank=True, null=True)
+
+    class Meta:
+        managed = False  # Created from a view. Don't remove.
+        db_table = 'view_dong'
+
+
+class ViewDongBuilding(models.Model):
+    hangjungdong_id = models.IntegerField()
+    gu_dong = models.CharField(max_length=151, db_collation='utf8_general_ci', blank=True, null=True)
+    building_id = models.IntegerField()
+    building_category = models.CharField(max_length=200, db_collation='utf8_general_ci', blank=True, null=True)
+    building_detail = models.CharField(max_length=200, db_collation='utf8_general_ci', blank=True, null=True)
+    building_count = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False  # Created from a view. Don't remove.
+        db_table = 'view_dong_building'
+
+
+class ViewGangnam(models.Model):
+    bike_stop_id = models.TextField(db_collation='utf8mb4_unicode_ci', blank=True, null=True)
+    bike_stop_code = models.TextField(db_collation='utf8mb4_unicode_ci', blank=True, null=True)
+    bike_stop_lat = models.DecimalField(max_digits=6, decimal_places=4, blank=True, null=True)
+    bike_stop_lot = models.DecimalField(max_digits=7, decimal_places=4, blank=True, null=True)
+    distance = models.FloatField(blank=True, null=True)
+    gu = models.CharField(max_length=3, db_collation='utf8_general_ci')
+    dong = models.CharField(max_length=4, db_collation='utf8_general_ci')
+
+    class Meta:
+        managed = False  # Created from a view. Don't remove.
+        db_table = 'view_gangnam'
+
+
+class ViewGwanak(models.Model):
+    bike_stop_id = models.TextField(db_collation='utf8mb4_unicode_ci', blank=True, null=True)
+    bike_stop_code = models.TextField(db_collation='utf8mb4_unicode_ci', blank=True, null=True)
+    bike_stop_lat = models.DecimalField(max_digits=6, decimal_places=4, blank=True, null=True)
+    bike_stop_lot = models.DecimalField(max_digits=7, decimal_places=4, blank=True, null=True)
+    distance = models.FloatField(blank=True, null=True)
+    gu = models.CharField(max_length=3, db_collation='utf8_general_ci')
+    dong = models.CharField(max_length=4, db_collation='utf8_general_ci')
+
+    class Meta:
+        managed = False  # Created from a view. Don't remove.
+        db_table = 'view_gwanak'
+
+
+class ViewOntimeStop(models.Model):
+    ontime_rental_info_id = models.IntegerField()
+    bike_stop_code = models.CharField(max_length=20, db_collation='utf8mb4_unicode_ci', blank=True, null=True)
+    ontime_timestamp = models.DateTimeField()
+    holder_amount = models.IntegerField(blank=True, null=True)
+    parking_rate = models.IntegerField(blank=True, null=True)
+    parking_amount = models.IntegerField(blank=True, null=True)
+    bike_stop_id = models.TextField(db_collation='utf8mb4_unicode_ci', blank=True, null=True)
+    bike_stop_lat = models.DecimalField(max_digits=6, decimal_places=4, blank=True, null=True)
+    bike_stop_lot = models.DecimalField(max_digits=7, decimal_places=4, blank=True, null=True)
+
+    class Meta:
+        managed = False  # Created from a view. Don't remove.
+        db_table = 'view_ontime_stop'
+
+
+class ViewPop(models.Model):
+    day_time = models.CharField(max_length=16, db_collation='utf8_general_ci', blank=True, null=True)
+    hangjungdong_id = models.IntegerField(blank=True, null=True)
+    number_0_9 = models.IntegerField(db_column='0_9', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_10_19 = models.IntegerField(db_column='10_19', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_20_29 = models.IntegerField(db_column='20_29', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_30_39 = models.IntegerField(db_column='30_39', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_40_49 = models.IntegerField(db_column='40_49', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_50_59 = models.IntegerField(db_column='50_59', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_60_69 = models.IntegerField(db_column='60_69', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_70_field = models.IntegerField(db_column='70_', blank=True, null=True)  # Field renamed because it ended with '_'. Field renamed because it wasn't a valid Python identifier.
+
+    class Meta:
+        managed = False  # Created from a view. Don't remove.
+        db_table = 'view_pop'
+
+
+class ViewSum(models.Model):
+    sum_quantity_hour_id = models.IntegerField()
+    bike_stop_id = models.IntegerField(blank=True, null=True)
+    day_time = models.CharField(max_length=22, db_collation='utf8_general_ci', blank=True, null=True)
+    sum_quantity = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False  # Created from a view. Don't remove.
+        db_table = 'view_sum'
+
+
+class ViewSumAge(models.Model):
+    sum_quantity_hour_id = models.IntegerField()
+    bike_stop_id = models.IntegerField(blank=True, null=True)
+    day_time = models.CharField(max_length=22, db_collation='utf8_general_ci', blank=True, null=True)
+    sum_quantity = models.IntegerField(blank=True, null=True)
+    avg_age_id = models.IntegerField()
+    age_category = models.CharField(max_length=100, db_collation='utf8_general_ci', blank=True, null=True)
+    avg_age_quantity = models.FloatField(blank=True, null=True)
+
+    class Meta:
+        managed = False  # Created from a view. Don't remove.
+        db_table = 'view_sum_age'
+
+
+class ViewSumAgeStop(models.Model):
+    sum_quantity_hour_id = models.IntegerField()
+    bike_stop_id = models.IntegerField(blank=True, null=True)
+    bike_stop_code = models.TextField(db_collation='utf8mb4_unicode_ci', blank=True, null=True)
+    bike_stop_lat = models.DecimalField(max_digits=6, decimal_places=4, blank=True, null=True)
+    bike_stop_lot = models.DecimalField(max_digits=7, decimal_places=4, blank=True, null=True)
+    day_time = models.CharField(max_length=22, db_collation='utf8_general_ci', blank=True, null=True)
+    sum_quantity = models.IntegerField(blank=True, null=True)
+    avg_age_id = models.IntegerField()
+    age_category = models.CharField(max_length=100, db_collation='utf8_general_ci', blank=True, null=True)
+    avg_age_quantity = models.FloatField(blank=True, null=True)
+
+    class Meta:
+        managed = False  # Created from a view. Don't remove.
+        db_table = 'view_sum_age_stop'
+
+
+class ViewSumPop(models.Model):
+    day_time = models.CharField(max_length=22, db_collation='utf8_general_ci', blank=True, null=True)
+    hangjungdong_id = models.IntegerField(blank=True, null=True)
+    number_0_9 = models.IntegerField(db_column='0_9', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_10_19 = models.IntegerField(db_column='10_19', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_20_29 = models.IntegerField(db_column='20_29', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_30_39 = models.IntegerField(db_column='30_39', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_40_49 = models.IntegerField(db_column='40_49', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_50_59 = models.IntegerField(db_column='50_59', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_60_69 = models.IntegerField(db_column='60_69', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_70_field = models.IntegerField(db_column='70_', blank=True, null=True)  # Field renamed because it ended with '_'. Field renamed because it wasn't a valid Python identifier.
+    sum_quantity_hour_id = models.IntegerField()
+    bike_stop_id = models.IntegerField(blank=True, null=True)
+    sum_quantity = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False  # Created from a view. Don't remove.
+        db_table = 'view_sum_pop'
+
+
+class ViewSumPopDongBuilding(models.Model):
+    id = models.CharField(max_length=36, db_collation='utf8_general_ci', blank=True, primary_key=True)
+    day_time = models.CharField(max_length=22, db_collation='utf8_general_ci', blank=True, null=True)
+    hangjungdong_id = models.IntegerField(blank=True, null=True)
+    number_0_9 = models.IntegerField(db_column='0_9', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_10_19 = models.IntegerField(db_column='10_19', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_20_29 = models.IntegerField(db_column='20_29', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_30_39 = models.IntegerField(db_column='30_39', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_40_49 = models.IntegerField(db_column='40_49', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_50_59 = models.IntegerField(db_column='50_59', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_60_69 = models.IntegerField(db_column='60_69', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_70_field = models.IntegerField(db_column='70_', blank=True, null=True)  # Field renamed because it ended with '_'. Field renamed because it wasn't a valid Python identifier.
+    sum_quantity_hour_id = models.IntegerField()
+    bike_stop_id = models.IntegerField(blank=True, null=True)
+    sum_quantity = models.IntegerField(blank=True, null=True)
+    gu_dong = models.CharField(max_length=151, db_collation='utf8_general_ci', blank=True, null=True)
+    building_id = models.IntegerField()
+    building_category = models.CharField(max_length=200, db_collation='utf8_general_ci', blank=True, null=True)
+    building_detail = models.CharField(max_length=200, db_collation='utf8_general_ci', blank=True, null=True)
+    building_count = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False  # Created from a view. Don't remove.
+        db_table = 'view_sum_pop_dong_building'
+
+
+class ViewSumPopDongBuildingWithoutStop(models.Model):
+    day_time = models.CharField(max_length=22, db_collation='utf8_general_ci', blank=True, null=True)
+    hangjungdong_id = models.IntegerField(blank=True, null=True)
+    number_0_9 = models.IntegerField(db_column='0_9', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_10_19 = models.IntegerField(db_column='10_19', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_20_29 = models.IntegerField(db_column='20_29', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_30_39 = models.IntegerField(db_column='30_39', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_40_49 = models.IntegerField(db_column='40_49', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_50_59 = models.IntegerField(db_column='50_59', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_60_69 = models.IntegerField(db_column='60_69', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_70_field = models.IntegerField(db_column='70_', blank=True, null=True)  # Field renamed because it ended with '_'. Field renamed because it wasn't a valid Python identifier.
+    gu_dong = models.CharField(max_length=151, db_collation='utf8_general_ci', blank=True, null=True)
+    building_category = models.CharField(max_length=200, db_collation='utf8_general_ci', blank=True, null=True)
+    building_detail = models.CharField(max_length=200, db_collation='utf8_general_ci', blank=True, null=True)
+    building_count = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False  # Created from a view. Don't remove.
+        db_table = 'view_sum_pop_dong_building_without_stop'
+
+
+class ViewSumPopStop(models.Model):
+    day_time = models.CharField(max_length=22, db_collation='utf8_general_ci', blank=True, null=True)
+    hangjungdong_id = models.IntegerField(blank=True, null=True)
+    number_0_9 = models.IntegerField(db_column='0_9', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_10_19 = models.IntegerField(db_column='10_19', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_20_29 = models.IntegerField(db_column='20_29', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_30_39 = models.IntegerField(db_column='30_39', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_40_49 = models.IntegerField(db_column='40_49', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_50_59 = models.IntegerField(db_column='50_59', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_60_69 = models.IntegerField(db_column='60_69', blank=True, null=True)  # Field renamed because it wasn't a valid Python identifier.
+    number_70_field = models.IntegerField(db_column='70_', blank=True, null=True)  # Field renamed because it ended with '_'. Field renamed because it wasn't a valid Python identifier.
+    sum_quantity_hour_id = models.IntegerField()
+    bike_stop_id = models.IntegerField(blank=True, null=True)
+    sum_quantity = models.IntegerField(blank=True, null=True)
+    bike_stop_code = models.TextField(db_collation='utf8mb4_unicode_ci', blank=True, null=True)
+    bike_stop_lat = models.DecimalField(max_digits=6, decimal_places=4, blank=True, null=True)
+    bike_stop_lot = models.DecimalField(max_digits=7, decimal_places=4, blank=True, null=True)
+
+    class Meta:
+        managed = False  # Created from a view. Don't remove.
+        db_table = 'view_sum_pop_stop'
