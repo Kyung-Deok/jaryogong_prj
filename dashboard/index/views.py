@@ -155,14 +155,10 @@ def events(choice_days=datetime.datetime.today().strftime('%Y-%m-%d')):
     choice_day_week = days_of_weeks[choice_daysf]
 
     # 이벤트 정보 불러오기 : 2020 -2022년도 까지
-    date_event_datas = Event.objects.filter(Q(year__in=['2020','2021','2022']) & Q(year=split_date.year)& Q(month=split_date.month) & Q(date=split_date.day))\
-        .values('year','month','date')[:1000]
-    cate_event_datas = Event.objects.filter(Q(year__in=['2020','2021','2022']) & Q(year=split_date.year)& Q(month=split_date.month) & Q(date=split_date.day))\
-        .values('event_category')[:1000]
-    name_event_datas = Event.objects.filter(Q(year__in=['2020','2021','2022']) & Q(year=split_date.year)& Q(month=split_date.month) & Q(date=split_date.day))\
-        .values('event_name')[:1000]
-    addr_event_datas = Event.objects.filter(Q(year__in=['2020','2021','2022']) & Q(year=split_date.year)& Q(month=split_date.month) & Q(date=split_date.day))\
-        .values('event_addr')[:1000]
+    date_event_datas = Event.objects.filter(Q(year__in=['2020','2021','2022']) & Q(year=split_date.year)& Q(month=split_date.month) & Q(date=split_date.day)).values('year','month','date')[:1000]
+    cate_event_datas = Event.objects.filter(Q(year__in=['2020','2021','2022']) & Q(year=split_date.year)& Q(month=split_date.month) & Q(date=split_date.day)).values('event_category')[:1000]
+    name_event_datas = Event.objects.filter(Q(year__in=['2020','2021','2022']) & Q(year=split_date.year)& Q(month=split_date.month) & Q(date=split_date.day)).values('event_name')[:1000]
+    addr_event_datas = Event.objects.filter(Q(year__in=['2020','2021','2022']) & Q(year=split_date.year)& Q(month=split_date.month) & Q(date=split_date.day)).values('event_addr')[:1000]
     data['date_event_datas'] = list(date_event_datas)
     data['cate_event_datas'] = list(cate_event_datas)
     data['name_event_datas'] = list(name_event_datas)
@@ -185,11 +181,9 @@ def events(choice_days=datetime.datetime.today().strftime('%Y-%m-%d')):
     select_times_list=[]
     select_event_times_list=[]
     for i in range(0,24):
-        sum_usual_dates = SumQuantityPerHourStop.objects.filter(Q(day_of_week=choice_day_week)& Q(time=i)).values("sum_quantity")\
-            .aggregate(sum_data=Sum('sum_quantity'))[:1000]
+        sum_usual_dates = SumQuantityPerHourStop.objects.filter(Q(day_of_week=choice_day_week)& Q(time=i)).values("sum_quantity")[:1000].aggregate(sum_data=Sum('sum_quantity'))
         # 요일마다 시간별   
-        sum_event_dates = SumQuantityBikeStop.objects.filter(Q(date=choice_days)& Q(time=i)).values("sum_quantity")\
-            .aggregate(sum_data=Sum('sum_quantity'))[:1000]
+        sum_event_dates = SumQuantityBikeStop.objects.filter(Q(date=choice_days)& Q(time=i)).values("sum_quantity")[:1000].aggregate(sum_data=Sum('sum_quantity'))
         select_times_list.append(sum_usual_dates)
         select_event_times_list.append(sum_event_dates)
     data['sum_usual_datas']=list(select_times_list)
