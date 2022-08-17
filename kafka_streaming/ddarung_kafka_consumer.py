@@ -15,7 +15,7 @@ consumer = KafkaConsumer(
 # consumer list를 가져온다
 print('[begin] get consumer list')
 for message in consumer:
-    time.sleep(2)
+    time.sleep(60)
     print("Topic: %s, Partition: %d, Offset: %d, Key: %s" % (
         message.topic, message.partition, message.offset, message.key, 
     ))

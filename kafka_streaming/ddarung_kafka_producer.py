@@ -48,12 +48,11 @@ while True:
     
     ontime_datas = parse_data1 + parse_data2 + parse_data3
     
-    time.sleep(2)
+    time.sleep(30)
     
     producer.send('stream_bikes2',value=ontime_datas)
     producer.flush()
     
     print('success')
     # 종료는 sys.exit() 구상중 
-# 1998개 갱신
-pprint(len(ontime_datas)) 
+# 2649 갱신
