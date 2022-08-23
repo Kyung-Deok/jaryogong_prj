@@ -223,7 +223,7 @@ def plotly_mapbox(request):
     choice_day_week = weeksort[choice_days_t]
     
     px.set_mapbox_access_token('pk.eyJ1IjoibHVuaXZlOTgiLCJhIjoiY2w2bjk3Z2Q2MHRvYjNrbjB0bGx3bGo3MSJ9.03OSIuFEfJj_ko78H0YZ2A')
-    seoulgeo = json.load(open('apps/static/assets/json/seoulhjd.geojson', encoding='utf-8'))
+    seoulgeo = json.load(open('/home/ubuntu/kdlee_django/jaryogong_prj/dashboard/static/assets/json/seoulhjd.geojson', encoding='utf-8'))
 
     # 인구분포도 지도
     pm = Population.objects.all().filter(day_of_week=choice_day_week)
@@ -285,5 +285,5 @@ def plotly_mapbox(request):
 
     building_map = plot(fig2, output_type='div')
     
-    return render(request, 'home/plotly_mapbox.html', 
+    return render(request, '/home/ubuntu/kdlee_django/jaryogong_prj/dashboard/index/templates/home/plotly-mapbox.html', 
     {'population_map': population_map, 'building_map' : building_map})
